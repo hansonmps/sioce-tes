@@ -14,10 +14,9 @@ var assignmentSchema = new Schema({
         required: true
     },
     expired: {
-        type: Date,
-        required: true
+        type: String
     },
-    image: [String]
+    photos: [String]
 }, {
     timestamps: true
 });
