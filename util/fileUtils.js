@@ -26,8 +26,8 @@ const deleteFile = (file) => {
   }
 };
 
-buildFileAddress = (publicIp, file) => {
-  return `http://${publicIp}/images/${file}`;
+buildFileAddress = (file) => {
+  return `http://localhost:3000/images/${file}`;
 };
 
 module.exports = {

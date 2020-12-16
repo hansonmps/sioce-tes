@@ -2,6 +2,7 @@ const express = require("express");
 const fileUtils = require("../util/fileUtils");
 const assignmentService = require("../services/assignmentService");
 const response = require("../util/response");
+const Assignments = require("../models/teacherAssignment");
 
 const assignmentRouter = express.Router();
 

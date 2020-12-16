@@ -1,9 +1,9 @@
-const assignments = require("../models/teacherAssignment");
+const Assignments = require("../models/teacherAssignment");
 const fileUtils = require("../util/fileUtils");
 
 
 const getAll = async () => {
-  const assignments = await assignments.find();
+  const assignments = await Assignments.find();
   for (const assignment of assignments) {
     assignment.photos = assignment.photos.map((photo) =>
       fileUtils.buildFileAddress(photo)
@@ -13,7 +13,7 @@ const getAll = async () => {
 };
 
 const add = async (assignment) => {
-  const newassignment = new assignments(assignment);
+  const newassignment = new Assignments(assignment);
   const result = await newassignment.save();
   result.photos = result.photos.map((photo) =>
     fileUtils.buildFileAddress(photo)
@@ -22,7 +22,7 @@ const add = async (assignment) => {
 };
 
 const deleteAll = async () => {
-  const assignments = await assignments.find();
+  const assignments = await Assignments.find();
   for (const assignment of assignments) {
     for (const photo of assignment.photos) {
       fileUtils.deleteFile(photo);
@@ -32,7 +32,7 @@ const deleteAll = async () => {
 };
 
 const get = async (id) => {
-  const assignment = await assignments.findById(id);
+  const assignment = await Assignments.findById(id);
   assignment.photos = assignment.photos.map((photo) =>
     fileUtils.buildFileAddress(photo)
   );
@@ -40,7 +40,7 @@ const get = async (id) => {
 };
 
 const update = async (id, updateassignment) => {
-  const assignment = await assignments.findById(id);
+  const assignment = await Assignments.findById(id);
   if (assignment == null) {
     return null;
   }
@@ -49,7 +49,7 @@ const update = async (id, updateassignment) => {
       fileUtils.deleteFile(photo);
     }
   }
-  const result = await assignments.findByIdAndUpdate(
+  const result = await Assignments.findByIdAndUpdate(
     id,
     { $set: updateassignment },
     { new: true }
@@ -61,7 +61,7 @@ const update = async (id, updateassignment) => {
 };
 
 const deleteById = async (id) => {
-  const assignment = await assignments.findByIdAndDelete(id);
+  const assignment = await Assignments.findByIdAndDelete(id);
   if (assignment == null) {
     return null;
   }

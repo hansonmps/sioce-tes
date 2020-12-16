@@ -3,18 +3,18 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mongoose = require('mongoose'); // added
+var mongoose = require('mongoose'); 
  
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var assignmentRouter = require('./routes/assignmentRouter'); // added
+var assignmentRouter = require('./routes/assignmentRouter'); 
  
-var Assignments = require('./models/teacherAssignment'); // added
+var Assignments = require('./models/teacherAssignment'); 
  
 var app = express();
-var url = 'mongodb://localhost:27017/tugas'; // added
-var connect = mongoose.connect(url); // added
-connect.then((db) => { // added
+var url = 'mongodb://localhost:27017/tugas';
+var connect = mongoose.connect(url); 
+connect.then((db) => { 
   console.log('Berhasil connect Mongo DB');
 }, (err) => {
   console.log('Error DB:' + err);
@@ -35,7 +35,7 @@ function auth(req, res, next) {
   var user = auth[0];
   var pass = auth[1];
   if (user == 'admin' && pass == 'password') {
-    next(); //authorized
+    next(); 
   } else {
     var err = new Error('You are not authenticated!');
     res.setHeader('WWW-Authenticate', 'Basic');
