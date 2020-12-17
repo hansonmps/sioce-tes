@@ -7,9 +7,11 @@ var mongoose = require('mongoose');
  
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var assignmentRouter = require('./routes/assignmentRouter'); 
+var assignmentRouter = require('./routes/assignmentRouter');
+var studentRouter = require('./routes/studentRouter'); 
  
 var Assignments = require('./models/teacherAssignment'); 
+var Uploads = require('./models/studentAssignment'); 
  
 var app = express();
 var url = 'mongodb://localhost:27017/tugas';
@@ -58,6 +60,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/assignments', assignmentRouter);
+app.use('/uploads', studentRouter);
  
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

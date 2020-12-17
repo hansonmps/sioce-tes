@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
   
 var assignmentSchema = new Schema({
-    userId: {
+    classId: {
         type: mongoose.Types.ObjectId
-      },
+    },
     name: {
         type: String,
         required: true,
