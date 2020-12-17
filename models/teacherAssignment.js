@@ -3,7 +3,9 @@ const Schema = mongoose.Schema;
   
 var assignmentSchema = new Schema({
     classId: {
-        type: mongoose.Types.ObjectId
+        type: mongoose.Types.ObjectId,
+        ref: "kelas",
+        required: true
     },
     name: {
         type: String,
@@ -14,7 +16,7 @@ var assignmentSchema = new Schema({
         required: true
     },
     expired: {
-        type: String
+        type: Date
     },
     photos: [String]
 }, {
