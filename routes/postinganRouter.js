@@ -34,6 +34,7 @@ postinganRouter.route('/')
         });
     })
     .delete((req, res, next)=>{
+        // contoh
         postingan.remove({}).then((resp)=>{
             res.status = 200;
             res.setHeader('Content-type','application/json');
