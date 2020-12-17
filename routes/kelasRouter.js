@@ -2,28 +2,28 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const {postingan} = require('../models/postingan');
+const {kelas} = require('../models/kelas');
 
-const postinganRouter = express.Router();
+const kelasRouter = express.Router();
 
-postinganRouter.use(bodyParser.json());
+kelasRouter.use(bodyParser.json());
 
-postinganRouter.route('/')
+kelasRouter.route('/')
     .get((req, res, next) => {
-        postingan.find({}).then((dataPostingan) => {
+        kelas.find({}).then((dataKelas) => {
             res.status = 200;
             res.setHeader('Content-type','application/json');
-            res.json(dataPostingan);
+            res.json(dataKelas);
         }, (err) => {
             res.status(404).send(err);
         })
     })
     .post((req, res, next)=>{
-        postingan.create(req.body).then((dataPostingan) => {
+        kelas.create(req.body).then((dataKelas) => {
             console.log('insert data berhasil');
             res.status = 200;
             res.setHeader('Content-type','application/json');
-            res.json(dataPostingan);
+            res.json(dataKelas);
         },(err)=>{
             if (err.name == "MongoError" && err.code == 11000){
                 res.status(422).send({ success: false, error:"Data yang sama di temukan", value: err.keyValue});
@@ -32,36 +32,27 @@ postinganRouter.route('/')
                 res.status(404).send(err)
             };
         });
-    })
-    .delete((req, res, next)=>{
-        // contoh
-        postingan.remove({}).then((resp)=>{
-            res.status = 200;
-            res.setHeader('Content-type','application/json');
-            res.json(resp);
-        },(err)=>{
-            res.status(404).send(err);
-        });
     });
 
-postinganRouter.route('/:postId')
+kelasRouter.route('/:classId')
     .get((req, res, next) => {
-        postingan.findById(req.params.postId).then((dataPostingan) => {
+        // console.log(req.params.dishId);
+        kelas.findById(req.params.classId).then((dataKelas) => {
             res.status = 200;
             res.setHeader('Content-type','application/json');
-            res.json(dataPostingan);
+            res.json(dataKelas);
         },(err)=>{
             res.status(404).send(err);
         });
     })
     .put((req, res, next)=>{
-        postingan.findByIdAndUpdate(req.params.postId,{
+        kelas.findByIdAndUpdate(req.params.classId,{
             $set: req.body
         }, {new: true})
-        .then((dataPostingan) => {
+        .then((dataKelas) => {
             res.status = 200;
             res.setHeader('Content-type','application/json');
-            res.json(dataPostingan);
+            res.json(dataKelas);
         },(err)=>{
             if (err.name == "MongoError" && err.code == 11000){
                 res.status(422).send({ success: false, error:"Data yang sama di temukan", value: err.keyValue});
@@ -72,7 +63,7 @@ postinganRouter.route('/:postId')
         });
     })
     .delete((req, res, next)=>{
-        postingan.findByIdAndRemove(req.params.postId)
+        dataKelas.findByIdAndRemove(req.params.classId)
         .then((resp) => {
             res.status = 200;
             res.setHeader('Content-type','application/json');
@@ -83,4 +74,4 @@ postinganRouter.route('/:postId')
         });
     });
 
-module.exports = postinganRouter;
+module.exports = kelasRouter;

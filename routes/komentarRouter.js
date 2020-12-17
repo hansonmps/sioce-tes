@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const {postingan, komentar} = require('../models/komentar');
+const {komentar} = require('../models/komentar');
 
 const komentarRouter = express.Router();
 
@@ -26,24 +26,15 @@ komentarRouter.route('/')
             res.json(dataKomentar);
         },(err)=>{
             if (err.name == "MongoError" && err.code == 11000){
-                res.status(422).send({ success: false, error:"Data yang sama di temukan", value: err.keyValue});S
+                res.status(422).send({ success: false, error:"Data yang sama di temukan", value: err.keyValue});
             }
             else{
                 res.status(404).send(err)
             };
         });
     })
-    .delete((req, res, next)=>{
-        komentar.remove({}).then((resp)=>{
-            res.status = 200;
-            res.setHeader('Content-type','application/json');
-            res.json(resp);
-        },(err)=>{
-            res.status(404).send(err);
-        });
-    });
     
-komentarRouter.route('/:postId')
+komentarRouter.route('/:commentsId')
     .get((req, res, next) => {
         // console.log(req.params.dishId);
         komentar.findById(req.params.commentsId).then((dataKomentar) => {
@@ -54,25 +45,8 @@ komentarRouter.route('/:postId')
             res.status(404).send(err);
         });
     })
-    .put((req, res, next)=>{
-        postingan.findByIdAndUpdate(req.params.postId,{
-            $set: req.body
-        }, {new: true})
-        .then((dataPostingan) => {
-            res.status = 200;
-            res.setHeader('Content-type','application/json');
-            res.json(dataPostingan);
-        },(err)=>{
-            if (err.name == "MongoError" && err.code == 11000){
-                res.status(422).send({ success: false, error:"Data yang sama di temukan", value: err.keyValue});
-            }
-            else{
-                res.status(404).send(err)
-            };
-        });
-    })
     .delete((req, res, next)=>{
-        postingan.findByIdAndRemove(req.params.postId)
+        komentar.findByIdAndRemove(req.params.commentsId)
         .then((resp) => {
             res.status = 200;
             res.setHeader('Content-type','application/json');
@@ -83,4 +57,4 @@ komentarRouter.route('/:postId')
         });
     });
 
-module.exports = postinganRouter;
+module.exports = komentarRouter;
