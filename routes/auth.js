@@ -1,79 +1,73 @@
-var express = require('express');
-var router = express.Router();
-const bcrypt = require('bcryptjs');
+const router = require("express").Router();
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
-const user = require('../models/User');
+const User = require("../models/User");
+const { registerValidation, loginValidation } = require("../validation");
 
-router.get('/login', function (req, res) {
-    const data = {};
+// Register
+router.post("/register", async (req, res) => {
+  
+  const { error } = registerValidation(req.body);
+  if (error) return res.status(400).json({ error: error.details[0].message });
 
-    data.title = 'Login';
-    data.errors = req.flash('error');
+  const isEmailExist = await User.findOne({ email: req.body.email });
+  if (isEmailExist)
+    return res.status(400).json({ error: "Email telah terdaftar" });
 
-    res.render('auth/login', data);
+  const salt = await bcrypt.genSalt(10);
+  const password = await bcrypt.hash(req.body.password, salt);
+
+  const user = new User({
+    name: req.body.name,
+    email: req.body.email,
+    birthdate: req.body.birthdate,
+    sex: req.body.sex,
+    phone: req.body.phone,
+    status: req.body.status,
+    password,
+  });
+
+  try {
+    const savedUser = await user.save();
+    res.status = 200;
+    res.setHeader('Content-type','application/json');
+    res.json({ data: { userId: savedUser._id } });
+  } catch (error) {
+    res.status(400).json({ error });
+  }
 });
 
-router.get('/register', function (req, res) {
-    const data = {};
+// Login
+router.post("/login", async (req, res) => {
+  
+  const { error } = loginValidation(req.body);
+  if (error) return res.status(400).json({ error: error.details[0].message });
 
-    data.title = 'Register';
-    data.errors = req.flash('error');
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) return res.status(400).json({ error: "Email atau password salah" });
 
-    res.render('auth/register', data);
+  const validPassword = await bcrypt.compare(req.body.password, user.password);
+  if (!validPassword)
+    return res.status(400).json({ error: "Email atau password salah" });
+
+// Create Javascript Web Token
+const token = jwt.sign(
+    // payload data
+    {
+      name: user.name,
+      id: user._id,
+    },
+    process.env.TOKEN_SECRET, {expiresIn: '18000s'}
+  );
+
+  res.status = 200;
+  res.setHeader('Content-type','application/json');
+  res.header("Authorization", token).json({
+    data: {
+      token,
+    },
+  });
 });
 
-router.get('/logout', function (req, res) {
-    req.logout();
-    res.redirect('/auth/login');
-});
-
-
-router.post('/register', async function (req, res, next) {
-
-    const body = req.body;
-
-    if (body.email) {
-        /** Find if email exists or not */
-        const existing = await user.findOne({ email: body.email }).countDocuments();
-        
-        if (existing) {
-            /** Set flash message and redirect to signup page */
-            req.flash('error', 'User telah terdaftar!');
-            return res.redirect('/auth/register');
-        }
-
-        /**
-         * Hash password and save it into database
-         */
-        const salt = await bcrypt.genSalt(10);
-        body.password = await bcrypt.hash(body.password, salt);
-
-        try {            
-            const newUser = new user(body);
-            await newUser.save();
-            
-            /**
-             * Manually authenticating user
-             * comment the following lines and redirect to login page for authenticating.
-             */
-            req.logIn(newUser, function () {
-                res.redirect('/dashboard');
-            });
-        } catch (error) {
-            next(error);
-        }
-    }    
-})
-
-
-module.exports = function (passport) {
-
-    router.post('/login', passport.authenticate('local', {
-        failureRedirect: '/auth/login',
-    }), async function (req, res) {
-        res.redirect('/dashboard')
-    })
-
-
-    return router;
-};
+module.exports = router;
