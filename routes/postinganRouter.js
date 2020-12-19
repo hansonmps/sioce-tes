@@ -27,7 +27,7 @@ postinganRouter.route('/')
             res.json(dataPostingan);
         },(err)=>{
             if (err.name == "MongoError" && err.code == 11000){
-                res.status(422).send({ success: false, error:"Data yang sama di temukan", value: err.keyValue});S
+                res.status(422).send({ success: false, error:"Data yang sama di temukan", value: err.keyValue});
             }
             else{
                 res.status(404).send(err)
@@ -87,7 +87,7 @@ postinganRouter.route('/:postId')
 // not fixed
 postinganRouter.route('/:classId')
     .get((req, res, next) => {
-        postingan.find({classId: req.params.classId}).then((dataPostingan) => {
+        postingan.find({class_Id: req.params.classId}).then((dataPostingan) => {
             res.status = 200;
             res.setHeader('Content-type','application/json');
             res.json(dataPostingan);

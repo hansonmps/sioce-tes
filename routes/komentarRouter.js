@@ -36,7 +36,6 @@ komentarRouter.route('/')
     
 komentarRouter.route('/:commentsId')
     .get((req, res, next) => {
-        // console.log(req.params.dishId);
         komentar.findById(req.params.commentsId).then((dataKomentar) => {
             res.status = 200;
             res.setHeader('Content-type','application/json');

@@ -1,12 +1,15 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
+const toJson = require('@meanie/mongoose-to-json');
+ 
+mongoose.plugin(toJson)
 
 // import routes
 const authRoutes = require("./routes/auth");
@@ -24,7 +27,7 @@ const kelasRouter = require('./routes/kelasRouter');
 
 const app = express();
 
-// view engine setup
+//view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -41,6 +44,8 @@ mongoose.connect(
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
   },
   () => console.log("Berhasil terhubung ke Database")
 );

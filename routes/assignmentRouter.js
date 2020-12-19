@@ -2,7 +2,9 @@ const express = require("express");
 const fileUtils = require("../util/fileUtils");
 const assignmentService = require("../services/assignmentService");
 const response = require("../util/response");
+
 const Assignments = require("../models/teacherAssignment");
+const kelas = require("../models/kelas");
 
 const assignmentRouter = express.Router();
 
@@ -27,14 +29,13 @@ assignmentRouter
     try {
       console.log(`Update assignment : ${JSON.stringify(req.body)}`);
       body = req.body;
-      console.log(body.room);
-      const assignment = {
-        name: body.name,
-        description: body.description,
-        expired: body.expired,
-        fileAssignments: req.files.map((file) => file.filename),
-      };
-      const result = await assignmentService.update(req.params.id, assignment);
+      // const assignment = {
+      //   name: body.name,
+      //   description: body.description,
+      //   expired: body.expired,
+      //   fileAssignments: req.files.map((file) => file.filename),
+      // };
+      const result = await assignmentService.update(req.params.id, body);
       if (result == null) {
         response.responseFailed(res, 404, "assignment not found");
         return;

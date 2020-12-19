@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const toJson = require('@meanie/mongoose-to-json');
 
 const postinganSchema = new Schema({
-    classId: {
+    class_Id: {
         type: mongoose.Types.ObjectId,
         ref:"kelas",
         required: true,
-        unique: true
+        // unique: true
     },
     title: {
         type: String,
@@ -20,5 +21,6 @@ const postinganSchema = new Schema({
     timestamps: true
 });
 
+postinganSchema.plugin(toJson);
 const postingan = mongoose.model("postingan", postinganSchema);
 module.exports = { postingan }

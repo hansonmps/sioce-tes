@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const toJson = require('@meanie/mongoose-to-json');
   
 const uploadSchema = new Schema({
     assignmentId: {
@@ -17,6 +18,6 @@ const uploadSchema = new Schema({
     timestamps: true
 });
  
+uploadSchema.plugin(toJson);
 const Upload = mongoose.model('Upload', uploadSchema);
- 
 module.exports = Upload;

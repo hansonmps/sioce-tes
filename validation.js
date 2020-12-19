@@ -7,7 +7,7 @@ const registerValidation = (data) => {
     birthdate: Joi.string().required(),
     sex: Joi.string().min(9).max(12).required(),
     phone: Joi.string().min(10).max(12).required(),
-    status: Joi.string().required(),
+    statusType: Joi.string().required(),
     password: Joi.string().min(6).max(128).required(),
   });
 
@@ -23,21 +23,7 @@ const loginValidation = (data) => {
   return schema.validate(data);
 };
 
-const editValidation = (data) => {
-  const schema = Joi.object({
-    name: Joi.string().min(6).max(26).required(),
-    birthdate: Joi.string().required(),
-    sex: Joi.string().min(9).max(12).required(),
-    phone: Joi.string().min(10).max(12).required(),
-    status: Joi.string().required(),
-    password: Joi.string().min(6).max(128).required(),
-  });
-
-  return schema.validate(data);
-};
-
 module.exports = {
   registerValidation,
   loginValidation,
-  editValidation,
 };

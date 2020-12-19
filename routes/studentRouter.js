@@ -27,7 +27,6 @@ studentRouter
     try {
       console.log(`Update assignment : ${JSON.stringify(req.body)}`);
       body = req.body;
-      console.log(body.room);
       const student = {
         fileuploads: req.files.map((file) => file.filename)
       };
@@ -68,6 +67,8 @@ studentRouter
     try {
       const body = req.body;
       const student = {
+        assignmentId: body.assignmentId,
+        userId: body.userId,
         fileuploads: req.files.map((file) => file.filename)
       };
       const students = await studentService.add(student);

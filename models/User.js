@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
     min: 6,
     max: 128,
   },
-  status: {
+  statusType: {
     type: String,
     required: true,
   }

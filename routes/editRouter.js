@@ -13,7 +13,15 @@ editRouter.route('/:userId')
         User.findById(req.params.userId).then((dataUser) => {
             res.status = 200;
             res.setHeader('Content-type','application/json');
-            res.json(dataUser);
+            res.json({
+                id: dataUser._id,
+                nama: dataUser.name,
+                email: dataUser.email,
+                birthdate: dataUser.birthdate,
+                sex: dataUser.sex,
+                phone: dataUser.phone,
+                statusType: dataUser.statusType
+            });
         },(err)=>{
             res.status(404).send(err);
         });
@@ -25,7 +33,15 @@ editRouter.route('/:userId')
         .then((dataUser) => {
             res.status = 200;
             res.setHeader('Content-type','application/json');
-            res.json(dataUser);
+            res.json({
+                id: dataUser._id,
+                nama: dataUser.name,
+                email: dataUser.email,
+                birthdate: dataUser.birthdate,
+                sex: dataUser.sex,
+                phone: dataUser.phone,
+                statusType: dataUser.statusType
+            });
         },(err)=>{
             if (err.name == "MongoError" && err.code == 11000){
                 res.status(422).send({ success: false, error:"Data sama!", value: err.keyValue});

@@ -24,7 +24,7 @@ router.post("/register", async (req, res) => {
     birthdate: req.body.birthdate,
     sex: req.body.sex,
     phone: req.body.phone,
-    status: req.body.status,
+    statusType: req.body.statusType,
     password,
   });
 
@@ -65,6 +65,9 @@ const token = jwt.sign(
   res.setHeader('Content-type','application/json');
   res.header("Authorization", token).json({
     data: {
+      id: user._id,
+      nama: user.name,
+      statusType: user.statusType,
       token,
     },
   });

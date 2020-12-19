@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const toJson = require('@meanie/mongoose-to-json');
   
 const assignmentSchema = new Schema({
     classId: {
@@ -23,5 +24,6 @@ const assignmentSchema = new Schema({
     timestamps: true
 });
  
+assignmentSchema.plugin(toJson);
 const Assignment = mongoose.model('Assignment', assignmentSchema);
 module.exports = Assignment;

@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+const Assignments = require("../models/teacherAssignment");
 const {kelas} = require('../models/kelas');
 
 const kelasRouter = express.Router();
@@ -72,5 +73,17 @@ kelasRouter.route('/:classId')
             res.end('Failed to remove data');
         });
     });
+
+kelasRouter.route('/:classId')
+    .get((req, res, next) => {
+      Assignments.findById(req.params.classId).then((dataAssignments) => {
+            res.status = 200;
+            res.setHeader('Content-type','application/json');
+            res.json(dataAssignments);
+        },(err)=>{
+            res.status(404).send(err);
+        });
+    });
+    
 
 module.exports = kelasRouter;

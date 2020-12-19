@@ -27,7 +27,7 @@ const deleteFile = (file) => {
 };
 
 buildFileAddress = (file) => {
-  return `http://localhost:3000/files/${file}`;
+  return `${file}`;
 };
 
 module.exports = {
